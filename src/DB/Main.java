@@ -5,6 +5,8 @@
  */
 package DB;
 
+import CompanyGUI.AddCompanyGUI;
+import Controller.CompanyController;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -14,7 +16,10 @@ import java.sql.SQLException;
  */
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Connection connection = DBConnection.getDBConnection().getConnection();
+        //Connection connection = DBConnection.getDBConnection().getConnection();
+        CompanyController.loadArrays();
+        AddCompanyGUI a = new AddCompanyGUI();
+        a.setVisible(true);
     }
             
     
