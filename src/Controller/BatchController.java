@@ -74,5 +74,14 @@ public class BatchController {
              
              
         }
+    public static String searchBatchID(String year,int number) throws ClassNotFoundException, SQLException{
+       String sql="Select batchId from Batch where year='"+year+"'and number='"+number+"'";
+       ResultSet rst= DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+       String batchID="";
+       while(rst.next()){
+           batchID=rst.getString(1);
+        }
+       return batchID;
     
+    }
 }
