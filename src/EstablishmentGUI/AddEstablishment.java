@@ -5,7 +5,9 @@
  */
 package EstablishmentGUI;
 import Controller.EstablishmentController1;
+import Model.Student;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -217,7 +219,16 @@ public class AddEstablishment extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AddEstablishment.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        try {
+            ArrayList<Student> student=new ArrayList<Student>();
+            student=EstablishmentController1.searchEstablishments(year, batchNum, field);
+            EstablishmentDetails a=new EstablishmentDetails();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddEstablishment.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AddEstablishment.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
