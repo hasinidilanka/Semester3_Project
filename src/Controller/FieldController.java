@@ -11,6 +11,8 @@ import Model.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -41,5 +43,15 @@ public class FieldController {
             fields.add(newField);
         }
         return fields;
+    }
+    public static String searchFieldID(String field) throws SQLException, ClassNotFoundException{
+        String sql2="Select fieldID from Field where name='"+field+"'";
+       ResultSet rst2= DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql2);
+       String fieldID="";
+       while(rst2.next()){
+           fieldID=rst2.getString(1);
+       }
+       return fieldID;
+ 
     }
 }
