@@ -13,8 +13,9 @@ import java.sql.SQLException;
  * @author Hasini
  */
 public class Main {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Connection connection = DBConnection.getDBConnection().getConnection();
+   
+    public static void main(String[] args) {
+       
     }
             
     

@@ -20,7 +20,7 @@ public class DBConnection {
     private static DBConnection dBConnection;
     private DBConnection() throws ClassNotFoundException, SQLException{
         Class.forName("com.mysql.jdbc.Driver");
-        connection=DriverManager.getConnection("jdbc:mysql://localhost/IndustrialTraining","root","hasini");
+        connection=DriverManager.getConnection("jdbc:mysql://localhost/IndustrialTraining","root","rangika");
     }
     public static DBConnection getDBConnection() throws ClassNotFoundException, SQLException{
         if(dBConnection==null){
