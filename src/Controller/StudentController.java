@@ -54,6 +54,11 @@ public class StudentController {
         return field + "/" + subYear + "/" + number + "/" + "00";
 
     }
+    
+    public static int setStatus(int status,String indexNo,String reason) throws SQLException, ClassNotFoundException{
+        String sql = "Update student SET status='"+status+"' , reason='"+reason+"' where indexNumber='"+indexNo+"'";
+        return DBHandler.setData(DBConnection.getDBConnection().getConnection(), sql);
+    }
 
     public static String getNextIndexNumber(String code) {
         String[] s = code.split("/");
