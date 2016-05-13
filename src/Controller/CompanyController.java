@@ -6,6 +6,7 @@
 package Controller;
 
 import DB.DBConnection;
+import DB.DBHandler;
 import Model.Company;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,6 +57,16 @@ public class CompanyController {
 
         int res = stm.executeUpdate();
         return res > 0;
+    }
+    
+    public static String getCompanyName(String companyID) throws SQLException, ClassNotFoundException{
+        String sql = "Select name From company where companyID='" +companyID+ "'";
+        ResultSet rst = DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+  
+        while (rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
     }
 
 }
