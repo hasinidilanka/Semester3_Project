@@ -16,11 +16,11 @@ public class Establishment {
     private String companyName;
     private String establishmentID;
     private String registrationNumber;
-    private Date fromDate;
-    private Date toDate;
+    private String fromDate;
+    private String toDate;
     private ArrayList<Date> submissionDate;
     
-    public Establishment(String establishmentID,String companyName,String registrationNumber,Date fromDate,Date toDate){
+    public Establishment(String establishmentID,String companyName,String registrationNumber,String fromDate,String toDate){
         this.establishmentID=establishmentID;
         this.companyName=companyName;
         this.registrationNumber=registrationNumber;
@@ -40,11 +40,11 @@ public class Establishment {
         return registrationNumber;
     }
 
-    public Date getFromDate() {
+    public  String getFromDate() {
         return fromDate;
     }
 
-    public Date getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
