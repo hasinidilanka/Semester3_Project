@@ -199,14 +199,14 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="11">
                     <StringItem index="0" value="All"/>
-                    <StringItem index="1" value="Power"/>
+                    <StringItem index="1" value="Electrical"/>
                     <StringItem index="2" value="Ref &amp; Air"/>
                     <StringItem index="3" value="Electronic"/>
-                    <StringItem index="4" value="Mechanist"/>
-                    <StringItem index="5" value="Welders"/>
-                    <StringItem index="6" value="Wood work"/>
-                    <StringItem index="7" value="Plumbers"/>
-                    <StringItem index="8" value="Construction Supervisor"/>
+                    <StringItem index="4" value="Machanist"/>
+                    <StringItem index="5" value="Welder"/>
+                    <StringItem index="6" value="Wood Work"/>
+                    <StringItem index="7" value="Plumbing"/>
+                    <StringItem index="8" value="Construction"/>
                     <StringItem index="9" value="ICT"/>
                     <StringItem index="10" value="Computer Graphic Designing"/>
                   </StringArray>

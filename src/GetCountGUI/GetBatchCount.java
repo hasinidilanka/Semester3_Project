@@ -70,7 +70,10 @@ public class GetBatchCount extends javax.swing.JFrame {
         dtm2.getDataVector().removeAllElements();
         academicYear=jYear.getText();
         field=jField.getSelectedItem().toString();
-        jCountTopic.setText("Students counts of "+field+" field in batch "+academicYear+" / 0"+batchNo);
+        if(field=="Computer Graphic Designing"){
+            field="CGD";
+        }
+        jCountTopic.setText("Students count of "+field+" field in batch "+academicYear+" / 0"+batchNo);
 
         try {
             fieldID=FieldController.getFieldID(field);
@@ -197,7 +200,7 @@ public class GetBatchCount extends javax.swing.JFrame {
 
         jPanelGetCounts.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Power", "Ref & Air", "Electronic", "Mechanist", "Welders", "Wood work", "Plumbers", "Construction Supervisor", "ICT", "Computer Graphic Designing" }));
+        jField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Electrical", "Ref & Air", "Electronic", "Machanist", "Welder", "Wood Work", "Plumbing", "Construction", "ICT", "Computer Graphic Designing" }));
         jField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFieldActionPerformed(evt);
@@ -562,8 +565,6 @@ public class GetBatchCount extends javax.swing.JFrame {
     private javax.swing.JRadioButton jBatch2;
     private javax.swing.JLabel jCountTopic;
     private javax.swing.JPanel jDisplay;
-    private javax.swing.JTable jDisplay1;
-    private javax.swing.JTable jDisplay2;
     private javax.swing.JComboBox jField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -571,14 +572,10 @@ public class GetBatchCount extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelBatch;
     private javax.swing.JLabel jLabelField;
     private javax.swing.JLabel jLabelYear;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelGetCounts;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
@@ -590,8 +587,6 @@ public class GetBatchCount extends javax.swing.JFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTableCount;
     private javax.swing.JTable jTableField;
-    private javax.swing.JLabel jTopic;
-    private javax.swing.JLabel jTopic1;
     private javax.swing.JLabel jTopicBatch;
     private javax.swing.JTextField jYear;
     // End of variables declaration//GEN-END:variables
