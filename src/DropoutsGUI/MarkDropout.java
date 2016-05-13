@@ -5,11 +5,16 @@
  */
 package DropoutsGUI;
 
+import Controller.CompanyController;
 import Controller.EstablishmentController;
 import Controller.StudentController;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
@@ -31,29 +36,47 @@ public class MarkDropout extends javax.swing.JFrame {
     private String number;
     private String indexNo;
     private int status;
+    private String reason;
+    private String establishmentID;
 
     public MarkDropout() {
         initComponents();
         //jComboField.requestFocus();
         jBtnDropout.setVisible(false);
     }
-    
-     public void setCursor(int[] i,JComponent[] j,KeyEvent e){                   // Set the cursour when neccessary keys are pressed
-        for(int x=0;x<i.length;x++){
-            if(e.getKeyCode()==i[x]){
+
+    public void setCursor(int[] i, JComponent[] j, KeyEvent e) {                   // Set the cursour when neccessary keys are pressed
+        for (int x = 0; x < i.length; x++) {
+            if (e.getKeyCode() == i[x]) {
                 j[x].requestFocus();
             }
         }
-       
+
     }
-     
-    public void setClear(){
-        jName.setForeground(Color.black);
-        jName.setText(null);
+
+    public void setClear() {
         jIndexNo.setForeground(Color.black);
         jIndexNo.setText(null);
-        jEstablishment1.setText(null);
+        jName.setForeground(Color.black);
+        jName.setText(null);
+        jEstablishment.setText(null);
+        jEstablishment.setForeground(Color.black);
         jBtnDropout.setVisible(false);
+        jReason.setText(null);
+        jReason.setEditable(false);
+        jFromDate.setText(null);
+        jReason.setEnabled(true);
+        jFromDate.setEnabled(true);
+        jEstablishment.setEnabled(true);
+        jName.setEnabled(true);
+    }
+
+    private boolean isNumber(String number) {
+
+        if (!number.matches("\\d+")) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -79,14 +102,18 @@ public class MarkDropout extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jIndexNo = new javax.swing.JLabel();
-        jName = new javax.swing.JLabel();
-        jEstablishment1 = new javax.swing.JLabel();
         jBtnDropout = new javax.swing.JButton();
+        jLabelReason = new javax.swing.JLabel();
+        jReason = new javax.swing.JTextField();
+        jIndexNo = new javax.swing.JTextField();
+        jName = new javax.swing.JTextField();
+        jEstablishment = new javax.swing.JTextField();
+        jLabelFromDate = new javax.swing.JLabel();
+        jFromDate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel1.setText("Index no :");
 
@@ -154,12 +181,12 @@ public class MarkDropout extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addComponent(jTextNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(285, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jBtnMarkDropout)
-                .addGap(63, 63, 63))
+                .addGap(25, 25, 25))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,60 +201,116 @@ public class MarkDropout extends javax.swing.JFrame {
                     .addComponent(jComboBatchNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jTextNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jBtnMarkDropout)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Name :");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Index No :");
 
-        jLabel7.setText("Establishment 1 :");
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel7.setText("Last Establishment  :");
 
         jBtnDropout.setText("Dropout");
+        jBtnDropout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDropoutActionPerformed(evt);
+            }
+        });
+
+        jLabelReason.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabelReason.setText("Reason :");
+
+        jReason.setEditable(false);
+        jReason.setBackground(new java.awt.Color(255, 255, 255));
+        jReason.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jReasonActionPerformed(evt);
+            }
+        });
+
+        jIndexNo.setEditable(false);
+        jIndexNo.setBackground(new java.awt.Color(255, 255, 255));
+        jIndexNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jIndexNoActionPerformed(evt);
+            }
+        });
+
+        jName.setEditable(false);
+        jName.setBackground(new java.awt.Color(255, 255, 255));
+
+        jEstablishment.setEditable(false);
+        jEstablishment.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabelFromDate.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabelFromDate.setText("Starting Date :");
+
+        jFromDate.setEditable(false);
+        jFromDate.setBackground(new java.awt.Color(255, 255, 255));
+        jFromDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFromDateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabelFromDate)
+                    .addComponent(jLabelReason)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel7)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jEstablishment1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                    .addComponent(jName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jIndexNo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jReason)
+                    .addComponent(jName)
+                    .addComponent(jEstablishment)
+                    .addComponent(jIndexNo)
+                    .addComponent(jFromDate))
+                .addGap(21, 21, 21)
                 .addComponent(jBtnDropout, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jIndexNo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jIndexNo)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jName, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jEstablishment1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                .addComponent(jBtnDropout)
-                .addGap(27, 27, 27))
+                    .addComponent(jEstablishment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelFromDate)
+                    .addComponent(jFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelReason)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                        .addComponent(jBtnDropout))
+                    .addComponent(jReason))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,74 +338,108 @@ public class MarkDropout extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void getData() throws SQLException, ClassNotFoundException {
         String bNo;
+        String yearToday = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         field = jComboField.getSelectedItem().toString();
-        bNo=jComboBatchNo.getSelectedItem().toString();
+        bNo = jComboBatchNo.getSelectedItem().toString();
         batchNo = Integer.parseInt(bNo);
         year = jTextYear.getText();
         number = jTextNumber.getText();
         indexNo = field + "/" + year + "/" + bNo + "/" + number;
-        String name=StudentController.searchStudent(indexNo);
-        if(StudentController.isExist(indexNo)==false){
-            setClear();
-            jIndexNo.setText(indexNo);
-            jIndexNo.setForeground(Color.red);
-            JOptionPane.showMessageDialog(rootPane, "The index number "+indexNo+" does not exist.","Error",0);
+        String name = StudentController.searchStudent(indexNo);
+        if (year.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter a year with last two digits", "Error", 0);
+            jTextYear.requestFocus();
+
+        } else if (year.length() != 2 | isNumber(year)) {
+            JOptionPane.showMessageDialog(rootPane, "The year you eneterd is incorrect", "Error", 0);
+            jTextYear.requestFocus();
+        } else if (Integer.parseInt(20+year) > Integer.parseInt(yearToday) + 2) {
+            JOptionPane.showMessageDialog(rootPane, "The year you eneterd is far future", "Error", 0);
+            jTextYear.requestFocus();
+        }else if (number.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Please enter a number correctly ", "Error", 0);
+            jTextNumber.requestFocus();
+
+        } else if (isNumber(number)) {
+            JOptionPane.showMessageDialog(rootPane, "The last number you eneterd is incorrect", "Error", 0);
             jTextNumber.requestFocus();
         }
-        else if(name==null){
+        else if (StudentController.isExist(indexNo) == false) {
             setClear();
-            jName.setText("-");
-            jName.setForeground(Color.red);
-            jEstablishment1.setText("-");
-            jEstablishment1.setForeground(Color.red);
             jIndexNo.setText(indexNo);
             jIndexNo.setForeground(Color.red);
-            JOptionPane.showMessageDialog(rootPane, "Selected student is already marked as a dropout","Error",0);
+            jReason.setEnabled(false);
+            jFromDate.setEnabled(false);
+            jEstablishment.setEnabled(false);
+            jName.setEnabled(false);
+            JOptionPane.showMessageDialog(rootPane, "The index number " + indexNo + " does not exist.", "Error", 0);
             jTextNumber.requestFocus();
-        }else{
+        } else if (name == null) {
             setClear();
+            jIndexNo.setText("-");
+            jIndexNo.setForeground(Color.red);
+            jEstablishment.setText("-");
+            jEstablishment.setForeground(Color.red);
+            jName.setText(indexNo);
+            jName.setForeground(Color.red);
+            jReason.setEnabled(false);
+            jFromDate.setEnabled(false);
+            jEstablishment.setEnabled(false);
+            jName.setEnabled(false);
+            JOptionPane.showMessageDialog(rootPane, "Selected student is already marked as a dropout", "Error", 0);
+            jTextNumber.requestFocus();
+        } else if (name == "") {
+            setClear();
+            jIndexNo.setText("-");
+            jIndexNo.setForeground(Color.red);
+            jEstablishment.setText("-");
+            jEstablishment.setForeground(Color.red);
+            jName.setText(indexNo);
+            jName.setForeground(Color.red);
+            JOptionPane.showMessageDialog(rootPane, "Selected student is already marked as a dropout", "Error", 0);
+            jTextNumber.requestFocus();
+        } else {
+            setClear();
+            jReason.setEditable(true);
             jIndexNo.setText(indexNo);
-            jName.setForeground(Color.black);
-            jEstablishment1.setForeground(Color.blue);
-            jIndexNo.setForeground(Color.black);
             jName.setText(name);
             jBtnDropout.setVisible(true);
-//            if(EstablishmentController.getEstablishment(indexNo,1)==""){
-//                jEstablishment1.setText("-");
-//                status=0;
-//            }else if(EstablishmentController.getEstablishment(indexNo,1)==null){
-//                jEstablishment1.setText("-");
-//                status=0;
-//            }else{
-//                for(int i=1;i<12;i++){
-//                    jEstablishment1.setText(EstablishmentController.getEstablishment(indexNo,1));
-//                }
-//            }
-            JLabel[] labels = new JLabel[11];
-            for(int i=1;i<12;i++){
-                String companyName=EstablishmentController.getEstablishment(indexNo,i);
-                if(companyName==""){
-                    jEstablishment1.setText("-");
-                    status = i-1;
-                    System.out.println("bbbbbbbbbb");
+            for (int i = 1; i < 5; i++) {
+                String companyName = CompanyController.getCompanyName(EstablishmentController.getEstablishment(indexNo, i - 1));
+                String companyID = EstablishmentController.getEstablishment(indexNo, i);
+                if (companyID == "") {
+                    if (i == 0) {
+                        jEstablishment.setText("-");
+                        jReason.setText(name + " left out the course before in-training session");
+
+                        break;
+                    }
+                    jEstablishment.setText("Establishment - " + (i - 1) + " " + companyName);
+                    jFromDate.setText(EstablishmentController.getFromDate(indexNo, i - 1));
+                    establishmentID = EstablishmentController.getEstablishmentID(indexNo, i - 1);
+                    status = i - 1;
                     break;
-                } else if (companyName == null) {
-                    jEstablishment1.setText("-");
-                    status = i-1;
-                    labels[i] = new JLabel("Establishment"+i);
-                    jPanel1.add(labels[i]);
-                    //JLabel ll+i = new JLabel("label 1");
-                    //jLabelName = new javax.swing.JLabel();
-                    //jLabel1.setText("Establishment"+i);
-                    //jPanel1.
+                } else if (companyID == null) {
+                    if (i == 0) {
+                        jEstablishment.setText("-");
+                        jReason.setText(name + " left out the course before in-training session");
+                        reason = jReason.getText();
+                        break;
+                    }
+                    status = i - 1;
+                    establishmentID = EstablishmentController.getEstablishmentID(indexNo, i - 1);
+                    jEstablishment.setText("Establishment - " + (i - 1) + " at " + companyName);
+                    jFromDate.setText(EstablishmentController.getFromDate(indexNo, i - 1));
                     break;
                 } else {
-                    //JLabel establishment+"i"=new JLabel();
+                    status = i;
+
                 }
             }
+//            
         }
     }
-    
+
     private void jBtnMarkDropoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnMarkDropoutActionPerformed
         try {
             getData();
@@ -334,38 +451,69 @@ public class MarkDropout extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnMarkDropoutActionPerformed
 
     private void jComboFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboFieldKeyPressed
-        int[] i ={39};
-        JComponent[] j ={jTextYear};
-        setCursor(i,j, evt);
+        int[] i = {39};
+        JComponent[] j = {jTextYear};
+        setCursor(i, j, evt);
     }//GEN-LAST:event_jComboFieldKeyPressed
 
     private void jTextYearKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextYearKeyPressed
-        int[] i ={37,39};
-        JComponent[] j ={jComboField,jComboBatchNo};
-        setCursor(i,j, evt);
+        int[] i = {37, 39};
+        JComponent[] j = {jComboField, jComboBatchNo};
+        setCursor(i, j, evt);
     }//GEN-LAST:event_jTextYearKeyPressed
 
     private void jComboBatchNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBatchNoKeyPressed
-        int[] i ={37,39};
-        JComponent[] j ={jTextYear,jTextNumber};
-        setCursor(i,j, evt);
+        int[] i = {37, 39};
+        JComponent[] j = {jTextYear, jTextNumber};
+        setCursor(i, j, evt);
     }//GEN-LAST:event_jComboBatchNoKeyPressed
 
     private void jTextNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNumberKeyPressed
-        int[] i ={37,39,10};
-        JComponent[] j ={jComboBatchNo,jBtnMarkDropout,jBtnMarkDropout};
-        setCursor(i,j, evt);
+        int[] i = {37, 39, 10};
+        JComponent[] j = {jComboBatchNo, jBtnMarkDropout, jBtnMarkDropout};
+        setCursor(i, j, evt);
     }//GEN-LAST:event_jTextNumberKeyPressed
 
     private void jBtnMarkDropoutKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBtnMarkDropoutKeyPressed
         try {
-            getData();
+            int[] i = {37, 38};
+            JComponent[] j = {jTextNumber, jTextNumber};
+            setCursor(i, j, evt);
+            if (evt.getKeyCode() == 10) {
+                getData();
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(MarkDropout.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MarkDropout.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBtnMarkDropoutKeyPressed
+
+    private void jReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jReasonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jReasonActionPerformed
+
+    private void jIndexNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jIndexNoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jIndexNoActionPerformed
+
+    private void jFromDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFromDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFromDateActionPerformed
+
+    private void jBtnDropoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDropoutActionPerformed
+        try {
+            reason = jReason.getText();
+            StudentController.setStatus(status, indexNo, reason);
+            Date endDate = new Date();
+            EstablishmentController.setEndDate(endDate, establishmentID);
+        } catch (SQLException ex) {
+            Logger.getLogger(MarkDropout.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MarkDropout.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBtnDropoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -407,8 +555,9 @@ public class MarkDropout extends javax.swing.JFrame {
     private javax.swing.JButton jBtnMarkDropout;
     private javax.swing.JComboBox jComboBatchNo;
     private javax.swing.JComboBox jComboField;
-    private javax.swing.JLabel jEstablishment1;
-    private javax.swing.JLabel jIndexNo;
+    private javax.swing.JTextField jEstablishment;
+    private javax.swing.JTextField jFromDate;
+    private javax.swing.JTextField jIndexNo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -416,9 +565,12 @@ public class MarkDropout extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jName;
+    private javax.swing.JLabel jLabelFromDate;
+    private javax.swing.JLabel jLabelReason;
+    private javax.swing.JTextField jName;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField jReason;
     private javax.swing.JTextField jTextNumber;
     private javax.swing.JTextField jTextYear;
     // End of variables declaration//GEN-END:variables
