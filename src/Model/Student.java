@@ -42,6 +42,11 @@ public class Student {
        
      
     }
+    
+    public Student(String indexNo,String name){
+        this.indexNumber=indexNo;
+        this.name=name;
+    }
 
     public void setField(String field) {
         this.field = field;

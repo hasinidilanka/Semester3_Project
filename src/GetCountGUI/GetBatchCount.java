@@ -32,7 +32,7 @@ public class GetBatchCount extends javax.swing.JFrame {
     private String fieldID;
     private final DefaultTableModel dtm;
     private final DefaultTableModel dtm1;
-    private final DefaultTableModel dtm2;
+    
     public GetBatchCount() {
         initComponents();
         //jField.requestFocus();
@@ -40,7 +40,7 @@ public class GetBatchCount extends javax.swing.JFrame {
         jPanel3.setVisible(false);
         jPanel4.setVisible(false);
         dtm1= (DefaultTableModel) jTableCount.getModel();
-        dtm2= (DefaultTableModel) jTableField.getModel();
+        
         
     }
     
@@ -67,14 +67,22 @@ public class GetBatchCount extends javax.swing.JFrame {
 
     private void setData(){
         dtm1.getDataVector().removeAllElements();
-        dtm2.getDataVector().removeAllElements();
+        
         academicYear=jYear.getText();
         field=jField.getSelectedItem().toString();
         if(field=="Computer Graphic Designing"){
             field="CGD";
         }
         jCountTopic.setText("Students count of "+field+" field in batch "+academicYear+" / 0"+batchNo);
-
+        jTable.getTableHeader().setReorderingAllowed(false);
+            jTable.getTableHeader().setResizingAllowed(false);
+           
+            jTableCount.getTableHeader().setResizingAllowed(false);
+            jTableCount.getTableHeader().setReorderingAllowed(false);
+            
+            
+            jTable1.getTableHeader().setReorderingAllowed(false);
+            jTable1.getTableHeader().setResizingAllowed(false);
         try {
             fieldID=FieldController.getFieldID(field);
             batchID=BatchController.getBatchID(academicYear,batchNo);
@@ -105,9 +113,9 @@ public class GetBatchCount extends javax.swing.JFrame {
                    ArrayList<Field> fields=FieldController.getField();
                    for(int i=0;i<fields.size();i++){
                        fieldID=FieldController.getFieldID(fields.get(i).getName());
-                       Object[] fieldName={fields.get(i).getName()};
-                       dtm2.addRow(fieldName);
-                       Object[] row={StudentController.getPlacementCount(fieldID, batchID,"M"),StudentController.getPlacementCount(fieldID, batchID,"F"),StudentController.getDropoutCount(fieldID, batchID,"M"),StudentController.getDropoutCount(fieldID, batchID,"F"),StudentController.getInTrainingCount(fieldID, batchID,"M"),StudentController.getInTrainingCount(fieldID, batchID,"F")};
+                       //Object[] fieldName={fields.get(i).getName()};
+                       //dtm2.addRow(fieldName);
+                       Object[] row={fields.get(i).getName(),StudentController.getPlacementCount(fieldID, batchID,"M"),StudentController.getPlacementCount(fieldID, batchID,"F"),StudentController.getDropoutCount(fieldID, batchID,"M"),StudentController.getDropoutCount(fieldID, batchID,"F"),StudentController.getInTrainingCount(fieldID, batchID,"M"),StudentController.getInTrainingCount(fieldID, batchID,"F")};
                        dtm1.addRow(row);
                    
                    }
@@ -162,11 +170,8 @@ public class GetBatchCount extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTableCount = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTableField = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jTopicBatch = new javax.swing.JLabel();
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
@@ -354,11 +359,11 @@ public class GetBatchCount extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Male", "Female", "Male", "Female", "Male", "Female"
+                "Field", "Male", "Female", "Male", "Female", "Male", "Female"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -368,46 +373,28 @@ public class GetBatchCount extends javax.swing.JFrame {
         jScrollPane5.setViewportView(jTableCount);
 
         jPanel4.add(jScrollPane5);
-        jScrollPane5.setBounds(180, 110, 440, 200);
+        jScrollPane5.setBounds(10, 110, 620, 200);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("         No of Placement");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.add(jLabel1);
-        jLabel1.setBounds(180, 90, 150, 16);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("             Dropouts");
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.add(jLabel2);
-        jLabel2.setBounds(330, 90, 140, 16);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("            In-Training");
-        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel4.add(jLabel3);
-        jLabel3.setBounds(470, 90, 144, 16);
-
-        jTableField.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Field"
+                "    No of Placement", "    Dropouts", "    In-Training"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane7.setViewportView(jTableField);
+        jScrollPane1.setViewportView(jTable1);
 
-        jPanel4.add(jScrollPane7);
-        jScrollPane7.setBounds(10, 110, 170, 200);
+        jPanel4.add(jScrollPane1);
+        jScrollPane1.setBounds(100, 90, 530, 30);
 
         jTopicBatch.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jPanel4.add(jTopicBatch);
@@ -566,9 +553,6 @@ public class GetBatchCount extends javax.swing.JFrame {
     private javax.swing.JLabel jCountTopic;
     private javax.swing.JPanel jDisplay;
     private javax.swing.JComboBox jField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelBatch;
     private javax.swing.JLabel jLabelField;
     private javax.swing.JLabel jLabelYear;
@@ -576,17 +560,17 @@ public class GetBatchCount extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelGetCounts;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JButton jSearch;
     private javax.swing.JTable jTable;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTableCount;
-    private javax.swing.JTable jTableField;
     private javax.swing.JLabel jTopicBatch;
     private javax.swing.JTextField jYear;
     // End of variables declaration//GEN-END:variables

@@ -33,6 +33,12 @@ public class Company {
     public Company(){
     
     }
+    
+    public Company(String companyName, int rate){
+        this.companyName=companyName;
+        this.rate=rate;
+    }
+    
     //Company name
     public void setCompanyName(String name){
         this.companyName = name;

@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -67,6 +68,30 @@ public class CompanyController {
             return rst.getString(1);
         }
         return null;
+    }
+    
+    public static ArrayList<Company> getCompanies() throws ClassNotFoundException, SQLException{
+        String sql="select * from company ORDER BY rate DESC";
+        ResultSet rst=DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+        
+        ArrayList<Company> companies=new ArrayList<Company>();
+        while(rst.next()){
+            Company company = new Company(rst.getString(3),rst.getInt(6));
+            companies.add(company);
+        }
+        return companies;
+    }
+    
+    public static ArrayList<Company> getCompany(String field) throws ClassNotFoundException, SQLException{
+        String sql="select * from company where f ORDER BY rate DESC";
+        ResultSet rst=DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+        
+        ArrayList<Company> companies=new ArrayList<Company>();
+        while(rst.next()){
+            Company company = new Company(rst.getString(3),rst.getInt(6));
+            companies.add(company);
+        }
+        return companies;
     }
 
 }

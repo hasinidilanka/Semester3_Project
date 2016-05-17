@@ -54,4 +54,17 @@ public class FieldController {
        return fieldID;
  
     }
+    
+    public static int getTrainingPeriod(String fieldID) throws ClassNotFoundException, SQLException {
+        String sql = "Select trainingPeriod From Field where fieldID = '" + fieldID + "'";
+        ResultSet rst = DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+
+        while (rst.next()) {
+
+            return rst.getInt(1);
+
+        }
+
+        return 0;
+    }
 }

@@ -8,10 +8,12 @@ package Controller;
 import DB.DBConnection;
 import DB.DBHandler;
 import Model.Student;
+import Model.SubmissionDate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -121,7 +123,7 @@ public class StudentController {
 
     public static String getInTrainingCount(String fieldID, String batchID, String gender) throws ClassNotFoundException, SQLException {
         int count = 0;
-        String sql = "SELECT COUNT(indexNumber) FROM student where batchID='" + batchID + "' and fieldID='" + fieldID + "' and gender='" + gender + "' and status=0 ";
+        String sql = "SELECT COUNT(indexNumber) FROM student where batchID='" + batchID + "' and fieldID='" + fieldID + "' and gender='" + gender + "' and status=-2 ";
         ResultSet rst = DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
         while (rst.next()) {
             count = rst.getInt(1);
@@ -132,7 +134,7 @@ public class StudentController {
 
     public static String getDropoutCount(String fieldID, String batchID, String gender) throws ClassNotFoundException, SQLException {
         int count = 0;
-        String sql = "SELECT COUNT(indexNumber) FROM student where batchID='" + batchID + "' and fieldID='" + fieldID + "'and gender='" + gender + "'and status!=0 and status!=-1 ";
+        String sql = "SELECT COUNT(indexNumber) FROM student where batchID='" + batchID + "' and fieldID='" + fieldID + "'and gender='" + gender + "'and status!=-2 and status!=-1 ";
         ResultSet rst = DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
         while (rst.next()) {
             count = rst.getInt(1);
@@ -159,5 +161,18 @@ public class StudentController {
         }
         return String.valueOf(countTotal);
     }
+    
+   public static ArrayList<Student> getIndexNo(String fieldID,String batchID) throws SQLException, ClassNotFoundException{
+       
+        String sql = "Select * From Student where fieldID='"+fieldID+"' and batchID='"+batchID+"'" ;
+        ResultSet rst = DBHandler.getData(DBConnection.getDBConnection().getConnection(), sql);
+        ArrayList<Student> students=new ArrayList<Student>();
+        while (rst.next()) {
+            Student newStudent = new Student(rst.getString(1),rst.getString(4));
+            students.add(newStudent);
+        }
+        return students;
+    
+   }
 
 }
