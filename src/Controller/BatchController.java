@@ -23,6 +23,7 @@ public class BatchController {
     public static boolean addBatch(Batch batch) throws ClassNotFoundException, SQLException {
         Connection connection = DBConnection.getDBConnection().getConnection();
         PreparedStatement stm = connection.prepareStatement("Insert into Batch Values(?,?,?)");
+		
         stm.setObject(1, getNextBatchID(getLastBatchID()));
         stm.setObject(2, batch.getAcademicYear());
         stm.setObject(3, batch.getBatchNo());        
