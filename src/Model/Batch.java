@@ -17,8 +17,7 @@ public class Batch {
     private String academicYear;
     private int batchNo;
     private ArrayList<Field> fields ;
-	
-	private int semID;
+	private int semCount;
 
     
     
